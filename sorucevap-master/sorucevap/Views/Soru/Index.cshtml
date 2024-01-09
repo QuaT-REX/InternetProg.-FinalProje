@@ -1,0 +1,102 @@
+﻿@using sorucevap.ViewModel
+@model List<SoruListe>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="card">
+            <h5 class="card-header">Sorularım Tablosu</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Soru</th>
+                            <th>Soruyu soran kişi</th>
+                            <th>Durum</th>
+                            <th>Sil</th>
+                            <th>Düzenle</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.baslik</td>
+                                <td>@item.icerik</td>
+                                <td>@item.SoruSoranBilgisi</td>
+                                <td>
+                                    @if (item.Durum == true)
+                                    {
+                                        <a data-soru="@item.id" href="#" data-bs-toggle="modal" data-bs-target="#cevapgor_@item.id" class="btn btn-success btn_cevap">Cevaplandı. Cevabı görmek için tıkla</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Cevaplanmadı</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/Soru/Sil/@item.id" class="btn btn-danger m-1">Sil</a>
+                                </td>
+                                <td>
+                                    <a href="/Soru/Duzenle/@item.id" class="btn btn-warning m-1">Düzenle</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a class="btn btn-primary mt-4" href="/Soru/Ekle/">Yeni ekle</a>
+    </div>
+</div>
+
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="cevapgor_@item.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cevap</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Soru: @item.icerik</label>
+                    <p id="cevap"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function (res) {
+        $(".btn_cevap").click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-soru");
+            $.ajax({
+                type: 'Get',
+                url: '/Soru/CevapGetir',
+                data: { id: id },
+                success: function (res) {
+                    console.log(res);
+                   
+                    for (let i = 0; i < res.length; i++){
+                        var cevap = res[i].cevapIcerik;
+                        $("#cevap").html(cevap);
+                    }
+                   
+                }
+
+            })
+        })
+    })
+</script>

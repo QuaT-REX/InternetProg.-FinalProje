@@ -1,0 +1,24 @@
+﻿@using sorucevap.Models
+@model Soru
+@{
+    ViewData["Title"] = "Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <form method="post">
+            <div class="form-group mt-3 mb-3">
+                <label>Başlık</label>
+                <input type="text" asp-for="Baslik" class="form-control"/>
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <label>Soru</label>
+                <input type="text" asp-for="Icerik" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+</div>
+

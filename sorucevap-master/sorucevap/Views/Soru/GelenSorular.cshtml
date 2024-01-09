@@ -1,0 +1,92 @@
+﻿@using sorucevap.ViewModel
+@model List<SoruListe>
+@{
+    ViewData["Title"] = "GelenSorular";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="card">
+            <h5 class="card-header">Sorularım Tablosu</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Soru</th>
+                            <th>Soruyu soran kişi</th>
+                            <th>Sil</th>
+                            <th>Düzenle</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.baslik</td>
+                                <td>@item.icerik</td>
+                                <td>@item.SoruSoranBilgisi</td>
+                                <td>
+                                    <a href="/Soru/Sil/@item.id" class="btn btn-danger m-1">Sil</a>
+                                </td>
+                                <td>
+                                    <a data-bs-toggle="modal" data-bs-target="#cevap_@item.id" href="#" class="btn btn-success m-1">Cevapla</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="cevap_@item.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Soruyu Cevapla</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <label>Cevap</label>
+                        <input type="text" class="form-control" name="CevapIcerik" id="cevapicerik_@item.id" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <a data-id="@item.id" class="btn btn-primary kaydet">Kaydet</a>@*a yap*@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".kaydet").click(function (e) {
+          
+            e.preventDefault();
+            var id = $(this).attr("data-id");
+            var dataForm = {
+                id: id,
+                CevapIcerik: $("#cevapicerik_" + id).val(),
+            };
+            $.ajax({
+                type:'Post',
+                url: '/Soru/CevapVer',
+                data:dataForm,
+                success:function(res){
+                    alert("Soru cevaplandı");
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

@@ -1,0 +1,44 @@
+﻿@using sorucevap.ViewModel
+@model List<UserList>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="card">
+            <h5 class="card-header">Üyeler Tablosu</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Adı</th>
+                            <th>Soyadı</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>Email</th>
+                            <th>Yetki ver</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Surname</td>
+                                <td>@item.UserName</td>
+                                <td>@item.Email</td>
+                                <td>
+                                    <a href="/Uye/Yetkilendirme/@item.Id" class="btn btn-warning m-1">Yetki ver</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
